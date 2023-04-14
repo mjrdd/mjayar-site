@@ -1,6 +1,5 @@
 <script lang="ts">
-	import "@fontsource/chivo-mono";
-	import "@fontsource/chivo-mono/variable.css";
+	import { page } from "$app/stores";
 	import { onMount } from "svelte";
 
 	const timeOptions = {
@@ -20,26 +19,29 @@
 			clearInterval(interval);
 		};
 	});
+
+	let customFont = $page.url.searchParams.get("font");
+	$: googleCustomFont = customFont?.replace(" ", "+");
 </script>
+
+<svelte:head>
+	{#if customFont}
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link
+			href="https://fonts.googleapis.com/css2?family={googleCustomFont}&display=swap"
+			rel="stylesheet" />
+	{/if}
+</svelte:head>
 
 <div class="container my-6">
 	<div class="@container/clock bg-surface-200-700-token rounded-lg">
 		<div class="py-12 @lg/clock:py-16 @4xl/clock:py-24">
 			<div class="font-bold text-3xl text-center @lg/clock:text-5xl @4xl/clock:text-7xl">
-				<span class="font-chivomono">
+				<span style="font-family: {customFont ?? 'inherit'};">
 					{new Intl.DateTimeFormat("en-US", timeOptions).format(timeNow)}
 				</span>
 			</div>
 		</div>
 	</div>
 </div>
-
-<style lang="postcss">
-	.font-chivomono {
-		font-family: "Chivo Mono", monospace;
-
-		@supports (font-variation-settings: normal) {
-			font-family: "Chivo MonoVariable", monospace;
-		}
-	}
-</style>
