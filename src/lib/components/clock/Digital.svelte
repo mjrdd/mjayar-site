@@ -1,24 +1,23 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import { clamp, stringFallback } from "$lib/utils";
 
 	export let hours = 0;
 	export let minutes = 0;
 
-	let width: number;
+	export let background: string | null | undefined;
+	export let font: string | null | undefined;
 
-	function clamp(min: number, value: number, max: number): number {
-		return Math.min(Math.max(value, min), max);
-	}
+	let width: number;
+	$: size = clamp(10, width / 8, 100);
 </script>
 
 <div
 	class="@container/clock-digital w-full h-full flex justify-center items-center"
 	bind:clientWidth={width}
-	style="background-color: {$page.data.params.background ?? 'transparent'}">
+	style="background-color: {stringFallback(background, 'transparent')}">
 	<div
 		class="grid grid-cols-5 w-full max-w-3xl mx-12"
-		style="font-size: {clamp(10, width / 8, 100)}px; font-family: {$page.data.params.font ??
-			'inherit'}">
+		style="font-size: {size}px; font-family: {stringFallback(font, 'inherit')}">
 		<div class="flex justify-center items-center">{Math.floor(hours / 10)}</div>
 		<div class="flex justify-center items-center">{hours % 10}</div>
 		<div class="flex justify-center items-center anim-blink">:</div>
