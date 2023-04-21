@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import { AppBar, AppShell, LightSwitch } from "@skeletonlabs/skeleton";
 
-	export let data;
-
-	$: customFont = data.params.font?.replace(" ", "+");
+	$: params = Object.fromEntries($page.url.searchParams.entries());
+	$: customFont = params.font?.replace(" ", "+");
 </script>
 
 <svelte:head>
@@ -16,7 +16,7 @@
 	{/if}
 </svelte:head>
 
-{#if data.params.fullscreen}
+{#if !!params.fullscreen}
 	<AppShell>
 		<slot />
 	</AppShell>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { page } from "$app/stores";
 	import Digital from "$lib/components/clock/Digital.svelte";
 
 	let timeNow = new Date();
@@ -14,15 +15,15 @@
 		};
 	});
 
-	export let data;
+	$: params = Object.fromEntries($page.url.searchParams.entries());
 </script>
 
-{#if data.params.fullscreen}
+{#if !!params.fullscreen}
 	<Digital
 		hours={timeNow.getHours()}
 		minutes={timeNow.getMinutes()}
-		background={data.params.background}
-		font={data.params.font} />
+		background={params.background}
+		font={params.font} />
 {:else}
 	<div class="container my-6">
 		<div class="@container/clock bg-surface-200-700-token rounded-lg">
@@ -31,8 +32,8 @@
 					<Digital
 						hours={timeNow.getHours()}
 						minutes={timeNow.getMinutes()}
-						background={data.params.background}
-						font={data.params.font} />
+						background={params.background}
+						font={params.font} />
 				</div>
 			</div>
 		</div>
