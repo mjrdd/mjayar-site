@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { objectToStyleString } from "$lib/utils";
 	import { page } from "$app/stores";
-	import Digital from "$lib/components/clock/Digital.svelte";
 
-	let timeNow = new Date();
+	$: params = Object.fromEntries($page.url.searchParams.entries());
+	$: customFont = params.font?.replace(" ", "+");
+
+	let now = new Date();
 
 	onMount(() => {
 		const interval = setInterval(() => {
-			timeNow = new Date();
+			now = new Date();
 		}, 1000);
 
 		return () => {
@@ -15,27 +18,62 @@
 		};
 	});
 
-	$: params = Object.fromEntries($page.url.searchParams.entries());
+	$: minutes = now.getMinutes();
+	$: hours = now.getHours();
+
+	let width: number;
+	let height: number;
 </script>
 
-{#if !!params.fullscreen}
-	<Digital
-		hours={timeNow.getHours()}
-		minutes={timeNow.getMinutes()}
-		background={params.background}
-		font={params.font} />
-{:else}
-	<div class="container my-6">
-		<div class="@container/clock bg-surface-200-700-token rounded-lg">
-			<div class="py-12 @lg/clock:py-16 @4xl/clock:py-24">
-				<div class="font-bold text-3xl text-center @lg/clock:text-5xl @4xl/clock:text-7xl">
-					<Digital
-						hours={timeNow.getHours()}
-						minutes={timeNow.getMinutes()}
-						background={params.background}
-						font={params.font} />
-				</div>
-			</div>
-		</div>
+<svelte:head>
+	<title>Digital Clock</title>
+
+	{#if customFont}
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link
+			href="https://fonts.googleapis.com/css2?family={customFont}&display=swap"
+			rel="stylesheet" />
+	{/if}
+</svelte:head>
+
+<div
+	class="h-full flex flex-nowrap items-center justify-center select-none"
+	style={objectToStyleString({
+		fontSize: width / 4 + "px",
+		fontFamily: params.font ? params.font : "inherit",
+		backgroundColor: params.bg ? "#" + params.bg : "inherit"
+	})}
+	bind:clientWidth={width}
+	bind:clientHeight={height}>
+	<div
+		class="grid grid-cols-2 place-items-center"
+		style={objectToStyleString({ width: width / 2.5 + "px" })}>
+		<div>{Math.floor(hours / 10)}</div>
+		<div>{hours % 10}</div>
 	</div>
-{/if}
+	<span class="blink">:</span>
+	<div
+		class="grid grid-cols-2 place-items-center"
+		style={objectToStyleString({ width: width / 2.5 + "px" })}>
+		<div>{Math.floor(minutes / 10)}</div>
+		<div>{minutes % 10}</div>
+	</div>
+</div>
+
+<style>
+	.blink {
+		animation: kf-blink 1.5s step-end infinite;
+	}
+
+	@keyframes kf-blink {
+		0%,
+		100% {
+			opacity: 1;
+		}
+
+		50% {
+			opacity: 0;
+		}
+	}
+</style>

@@ -2,17 +2,13 @@ export function clamp(min: number, value: number, max: number) {
 	return Math.min(Math.max(value, min), max);
 }
 
-export function mapObject<TObject extends object, TValue>(
-	obj: TObject,
-	mapper: (value: TObject[keyof TObject], key: keyof TObject) => TValue
-) {
-	const mappedObject = {} as { [K in keyof TObject]: TValue };
-	for (const key in obj) {
-		if (Object.prototype.hasOwnProperty.call(obj, key)) {
-			mappedObject[key] = mapper(obj[key], key);
-		}
-	}
-	return mappedObject;
+export function objectToStyleString(styles: Record<string, string>) {
+	return Object.entries(styles)
+		.map(([key, value]) => {
+			const property = key.replace(/[A-Z]/g, (match) => "-" + match.toLowerCase());
+			return property + ": " + value;
+		})
+		.join("; ");
 }
 
 export function shuffleArray<TElement>(array: TElement[]) {
