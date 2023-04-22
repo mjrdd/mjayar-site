@@ -1,7 +1,13 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { objectToStyleString } from "$lib/utils";
+	import { onDestroy, onMount } from "svelte";
+	import { fly } from "svelte/transition";
 	import { page } from "$app/stores";
+	import { objectToStyleString } from "$lib/utils";
+	import Icon from "@iconify/svelte/offline";
+	import GearFill from "@iconify-icons/bi/gear-fill";
+	import { modalStore } from "@skeletonlabs/skeleton";
+	import type { ModalComponent, ModalSettings } from "@skeletonlabs/skeleton";
+	import ModalConfig from "./ModalConfig.svelte";
 
 	$: params = Object.fromEntries($page.url.searchParams.entries());
 	$: customFont = params.font?.replace(" ", "+");
@@ -16,6 +22,34 @@
 		return () => {
 			clearInterval(interval);
 		};
+	});
+
+	const modalComponent: ModalComponent = {
+		ref: ModalConfig
+	};
+
+	const modalSetting: ModalSettings = {
+		type: "component",
+		component: modalComponent
+	};
+
+	function showModal() {
+		modalStore.trigger(modalSetting);
+	}
+
+	let showButton = false;
+	let timeoutId: number;
+
+	function handleMouseMove() {
+		showButton = true;
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => {
+			showButton = false;
+		}, 1000);
+	}
+
+	onDestroy(() => {
+		clearTimeout(timeoutId);
 	});
 
 	$: minutes = now.getMinutes();
@@ -40,10 +74,12 @@
 <div
 	class="h-full flex flex-nowrap items-center justify-center select-none"
 	style={objectToStyleString({
-		fontSize: width / 4 + "px",
+		fontSize: Math.min(width / 4, height - 100) + "px",
 		fontFamily: params.font ? params.font : "inherit",
-		backgroundColor: params.bg ? "#" + params.bg : "inherit"
+		backgroundColor: params.bg ? "#" + params.bg : "inherit",
+		color: params.color ? "#" + params.color : "inherit"
 	})}
+	on:mousemove={handleMouseMove}
 	bind:clientWidth={width}
 	bind:clientHeight={height}>
 	<div
@@ -60,6 +96,14 @@
 		<div>{minutes % 10}</div>
 	</div>
 </div>
+
+{#if showButton}
+	<div class="fixed bottom-0 right-0 p-6" transition:fly={{ y: 50 }}>
+		<button type="button" class="btn variant-filled-surface" on:click={showModal}>
+			<Icon icon={GearFill} />
+		</button>
+	</div>
+{/if}
 
 <style>
 	.blink {
