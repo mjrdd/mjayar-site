@@ -2,11 +2,10 @@ export function clamp(min: number, value: number, max: number) {
 	return Math.min(Math.max(value, min), max);
 }
 
-export function objectToStyleString(styles: Record<string, string>) {
+export function objectToStyleString(styles: Record<string, string | number>) {
 	return Object.entries(styles)
 		.map(([key, value]) => {
-			const property = key.replace(/[A-Z]/g, (match) => "-" + match.toLowerCase());
-			return property + ": " + value;
+			return key.replace(/[A-Z]/g, (match) => "-" + match.toLowerCase()) + ": " + value;
 		})
 		.join("; ");
 }
