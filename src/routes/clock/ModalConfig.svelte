@@ -12,22 +12,22 @@
 	}
 </script>
 
-<div class="bg-surface-50-900-token rounded-lg w-full max-w-xl m-2 flex flex-col p-6">
-	<span class="text-3xl my-4">Settings</span>
+<div class="m-2 flex w-full max-w-xl flex-col rounded-lg p-6 bg-surface-50-900-token">
+	<span class="my-4 text-3xl">Settings</span>
 	<ul class="list mb-4">
-		<li class="border-b justify-between">
+		<li class="justify-between border-b">
 			<span>24-hour format</span>
 			<SlideToggle name="format24" size="sm" bind:checked={format24} />
 		</li>
-		<li class="border-b justify-between">
+		<li class="justify-between border-b">
 			<span>Show seconds</span>
 			<SlideToggle name="showSeconds" size="sm" bind:checked={showSeconds} />
 		</li>
-		<li class="border-b justify-between">
+		<li class="justify-between border-b">
 			<span>Background color</span>
 			<input type="color" name="bg-color" bind:value={backgroundColor} />
 		</li>
-		<li class="border-b justify-between">
+		<li class="justify-between border-b">
 			<span>Font color</span>
 			<input type="color" name="font-color" bind:value={color} />
 		</li>

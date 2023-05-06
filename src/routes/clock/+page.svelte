@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
-	import { fly } from "svelte/transition";
+	import { fade, fly } from "svelte/transition";
 	import { page } from "$app/stores";
 	import { objectToStyleString } from "$lib/utils";
 	import Icon from "@iconify/svelte/offline";
@@ -13,11 +13,14 @@
 	$: customFont = params.font?.replace(" ", "+");
 
 	let now = new Date();
+	let isLoaded = false;
 
 	onMount(() => {
 		const interval = setInterval(() => {
 			now = new Date();
 		}, 1000);
+
+		isLoaded = true;
 
 		return () => {
 			clearInterval(interval);
@@ -71,8 +74,14 @@
 	{/if}
 </svelte:head>
 
+{#if !isLoaded}
+	<div
+		class="fixed inset-0 z-10 bg-surface-100-800-token"
+		out:fade={{ delay: 250, duration: 500 }} />
+{/if}
+
 <div
-	class="h-full flex flex-nowrap items-center justify-center select-none"
+	class="flex h-full select-none flex-nowrap items-center justify-center"
 	style={objectToStyleString({
 		fontSize: Math.min(width / 4, height - 100) + "px",
 		fontFamily: params.font ? params.font : "inherit",
