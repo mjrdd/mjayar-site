@@ -2,6 +2,10 @@ export function clamp(min: number, value: number, max: number) {
 	return Math.min(Math.max(value, min), max);
 }
 
+export function round(num: number, decimals: number) {
+	return +num.toFixed(decimals);
+}
+
 export function objectToStyleString(styles: Record<string, string | number>) {
 	return Object.entries(styles)
 		.map(([key, value]) => {
