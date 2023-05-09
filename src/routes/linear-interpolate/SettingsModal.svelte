@@ -1,12 +1,9 @@
 <script lang="ts">
-	import { modalStore } from "@skeletonlabs/skeleton";
+	import { saveSettings } from "./handles";
+	import type { ConfigStore } from "./store";
 
-	export let decimals = 5;
-
-	function save() {
-		$modalStore[0].response?.({ decimals });
-		modalStore.close();
-	}
+	export let data: ConfigStore;
+	let decimals = data.decimals;
 </script>
 
 <div class="w-full max-w-md rounded-lg p-6 bg-surface-50-900-token">
@@ -20,6 +17,10 @@
 	</ul>
 
 	<div class="flex justify-end gap-2">
-		<button class="btn variant-filled-primary" on:click={save}>Save</button>
+		<button
+			class="btn variant-filled-primary"
+			on:click={() => saveSettings({ ...data, decimals })}>
+			Save
+		</button>
 	</div>
 </div>
