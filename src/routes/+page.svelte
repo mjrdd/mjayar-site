@@ -18,7 +18,7 @@
 	<meta name="description" content="Welcome to mjayar" />
 </svelte:head>
 
-<canvas bind:this={backdrop} class="fixed top-0 -z-10 h-full w-full opacity-10" />
+<canvas bind:this={backdrop} class="fixed top-0 -z-10 h-full w-full opacity-60" />
 
 <div class="grid h-full place-items-center">
 	<div class="flex w-full select-none flex-nowrap justify-center">
