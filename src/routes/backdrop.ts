@@ -48,12 +48,15 @@ export function createBackdrop(canvas: HTMLCanvasElement) {
 		ctx.lineStyle(8, 0x222222, 1);
 		ctx.moveTo(
 			clock.position.x +
-				0.08 * clock.radius * Math.cos(-(Math.PI / 3) * (hrs + min / 60 - 3)),
-			clock.position.y + 0.08 * clock.radius * Math.sin(-(Math.PI / 3) * (hrs + min / 60 - 3))
+				0.08 * clock.radius * Math.cos((Math.PI / 360) * (60 * hrs + min + 180)),
+			clock.position.y +
+				0.08 * clock.radius * Math.sin((Math.PI / 360) * (60 * hrs + min + 180))
 		);
 		ctx.lineTo(
-			clock.position.x + 0.5 * clock.radius * Math.cos(-(Math.PI / 3) * (hrs + min / 60)),
-			clock.position.y + 0.5 * clock.radius * Math.sin(-(Math.PI / 3) * (hrs + min / 60))
+			clock.position.x +
+				0.5 * clock.radius * Math.cos((Math.PI / 360) * (60 * hrs + min - 180)),
+			clock.position.y +
+				0.5 * clock.radius * Math.sin((Math.PI / 360) * (60 * hrs + min - 180))
 		);
 
 		ctx.lineStyle(5, 0x222222, 1);
