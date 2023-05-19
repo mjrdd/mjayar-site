@@ -1,14 +1,40 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { createBackdrop } from "./backdrop";
+	import { Application } from "pixi.js";
+	import { AnalogClock } from "$lib/pixiObjects";
 
 	let backdrop: HTMLCanvasElement;
 
 	onMount(() => {
-		const removeBackdrop = createBackdrop(backdrop);
+		const app = new Application({
+			view: backdrop,
+			antialias: true,
+			resizeTo: window,
+			backgroundAlpha: 0
+		});
+
+		const clock = new AnalogClock();
+		clock.position.x = 0.75 * window.innerWidth;
+		clock.position.y = 0.75 * window.innerHeight;
+		clock.metadata.radius = Math.min(window.innerWidth, window.innerHeight) * 0.4;
+		clock.metadata.periodic = false;
+
+		app.stage.addChild(clock);
+		app.ticker.add(() => {
+			clock.tick();
+		});
+
+		function handleResize() {
+			clock.position.x = 0.75 * window.innerWidth;
+			clock.position.y = 0.75 * window.innerHeight;
+			clock.metadata.radius = Math.min(window.innerWidth, window.innerHeight) * 0.4;
+		}
+
+		window.addEventListener("resize", handleResize);
 
 		return () => {
-			removeBackdrop();
+			window.removeEventListener("resize", handleResize);
+			app.destroy(false, { children: true });
 		};
 	});
 </script>
