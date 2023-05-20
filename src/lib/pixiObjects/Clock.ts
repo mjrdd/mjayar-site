@@ -27,11 +27,13 @@ export class AnalogClock extends Container {
 
 		for (let i = 0; i < 12; i++) {
 			const angle = (i / 6) * Math.PI;
+			const x = radius * Math.cos(angle);
+			const y = radius * Math.sin(angle);
 
 			this.graphics
 				.lineStyle(2, 0x030712, 1)
-				.moveTo(0.9 * radius * Math.cos(angle), 0.9 * radius * Math.sin(angle))
-				.lineTo(radius * Math.cos(angle), radius * Math.sin(angle));
+				.moveTo(x * 0.9, y * 0.9)
+				.lineTo(x, y);
 		}
 
 		const time = new Date();
