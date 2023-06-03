@@ -1,36 +1,44 @@
 import { Container, Graphics, LINE_CAP } from "pixi.js";
 
+export type ClockConfig = {
+	radius: number;
+	step: "seconds" | "milliseconds";
+};
+
+export type ClockComponents = {
+	graphics: Graphics;
+};
+
 export class AnalogClock extends Container {
-	private graphics: Graphics;
+	public components: ClockComponents;
+	public config: ClockConfig;
 
-	public metadata: {
-		radius?: number;
-		periodic?: boolean;
-	};
-
-	constructor() {
+	constructor(config?: Partial<ClockConfig>) {
 		super();
 
-		this.graphics = new Graphics();
-		this.addChild(this.graphics);
+		const DEFAULT_CONFIG: ClockConfig = {
+			radius: 100,
+			step: "milliseconds"
+		};
 
-		this.metadata = {};
+		this.config = Object.assign({}, DEFAULT_CONFIG, config);
+
+		this.components = {} as ClockComponents;
+		this.components.graphics = new Graphics();
+
+		this.addChild(...Object.values(this.components));
 	}
 
 	tick() {
-		let { radius, periodic } = this.metadata;
-
-		radius = radius ?? 0;
-		periodic = periodic ?? true;
-
-		this.graphics.clear();
+		const { radius, step } = this.config;
+		const { graphics } = this.components;
 
 		for (let i = 0; i < 12; i++) {
 			const angle = (i / 6) * Math.PI;
 			const x = radius * Math.cos(angle);
 			const y = radius * Math.sin(angle);
 
-			this.graphics
+			graphics
 				.lineStyle(2, 0x030712, 1)
 				.moveTo(x * 0.9, y * 0.9)
 				.lineTo(x, y);
@@ -42,11 +50,12 @@ export class AnalogClock extends Container {
 		const minutes = time.getMinutes();
 		const hours = time.getHours();
 
-		const angleSeconds = (seconds + +!periodic * milliseconds * 0.001) * (Math.PI / 30);
-		const angleMinutes = (minutes + (+!periodic * seconds) / 60) * (Math.PI / 30);
+		const angleSeconds =
+			(seconds + (+(step === "milliseconds") * milliseconds) / 1000) * (Math.PI / 30);
+		const angleMinutes = (minutes + seconds / 60) * (Math.PI / 30);
 		const angleHours = hours * (Math.PI / 6) + minutes * (Math.PI / 360);
 
-		this.graphics
+		graphics
 			.lineStyle(8, 0x030712, 1)
 			.moveTo(
 				0.08 * radius * Math.cos(angleHours + Math.PI * 0.5),
@@ -57,7 +66,7 @@ export class AnalogClock extends Container {
 				0.5 * radius * Math.sin(angleHours - Math.PI * 0.5)
 			).line.cap = LINE_CAP.ROUND;
 
-		this.graphics
+		graphics
 			.lineStyle(5, 0x030712, 1)
 			.moveTo(
 				0.1 * radius * Math.cos(angleMinutes + Math.PI * 0.5),
@@ -68,7 +77,7 @@ export class AnalogClock extends Container {
 				0.75 * radius * Math.sin(angleMinutes - Math.PI * 0.5)
 			).line.cap = LINE_CAP.ROUND;
 
-		this.graphics
+		graphics
 			.lineStyle(2, 0xb91c1c, 1)
 			.moveTo(
 				0.15 * radius * Math.cos(angleSeconds + Math.PI * 0.5),

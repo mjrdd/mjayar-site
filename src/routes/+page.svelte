@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { Application } from "pixi.js";
-	import { AnalogClock } from "$lib/pixiObjects";
+	import { AnalogClock } from "$lib/pixiObjects/Clock";
 
 	let backdrop: HTMLCanvasElement;
 
@@ -16,8 +16,7 @@
 		const clock = new AnalogClock();
 		clock.position.x = 0.75 * window.innerWidth;
 		clock.position.y = 0.75 * window.innerHeight;
-		clock.metadata.radius = Math.min(window.innerWidth, window.innerHeight) * 0.4;
-		clock.metadata.periodic = false;
+		clock.config.radius = Math.min(window.innerWidth, window.innerHeight) * 0.4;
 
 		app.stage.addChild(clock);
 		app.ticker.add(() => {
@@ -27,7 +26,7 @@
 		function handleResize() {
 			clock.position.x = 0.75 * window.innerWidth;
 			clock.position.y = 0.75 * window.innerHeight;
-			clock.metadata.radius = Math.min(window.innerWidth, window.innerHeight) * 0.4;
+			clock.config.radius = Math.min(window.innerWidth, window.innerHeight) * 0.4;
 		}
 
 		window.addEventListener("resize", handleResize);
