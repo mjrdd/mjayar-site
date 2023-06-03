@@ -2,11 +2,14 @@ import { redirect } from "@sveltejs/kit";
 import { Admin } from "pocketbase";
 
 export async function load({ locals }) {
-	const userModel = locals.pb.authStore.model;
+	const authModel = locals.pb.authStore.model;
 
-	if (userModel && userModel instanceof Admin) {
+	if (authModel && authModel instanceof Admin) {
+		const collections = await locals.pb.collections.getFullList();
+
 		return {
-			admin: structuredClone(userModel)
+			admin: structuredClone(authModel),
+			collections: structuredClone(collections)
 		};
 	}
 

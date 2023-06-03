@@ -26,8 +26,12 @@
 	<svelte:fragment slot="sidebarLeft">
 		<nav class="list-nav h-full bg-primary-100-800-token">
 			<ul class="p-4">
-				<li class="min-w-[250px]"><a href="/admin?users">Users</a></li>
-				<li class="min-w-[250px]"><a href="/admin?activity-log">Activity Log</a></li>
+				<li class="min-w-[250px]"><a href="/admin">dashboard</a></li>
+				{#each data.collections as collection}
+					<li class="min-w-[250px]">
+						<a href="/admin/{collection.name}">{collection.name.replace("_", " ")}</a>
+					</li>
+				{/each}
 			</ul>
 		</nav>
 	</svelte:fragment>
