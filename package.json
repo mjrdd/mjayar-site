@@ -44,6 +44,7 @@
 	"type": "module",
 	"dependencies": {
 		"@floating-ui/dom": "^1.2.9",
+		"date-fns": "^2.30.0",
 		"inter-ui": "^3.19.3",
 		"katex": "^0.16.7",
 		"pixi.js": "^7.2.4",
