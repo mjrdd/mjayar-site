@@ -2,7 +2,6 @@
 	import { superForm } from "sveltekit-superforms/client";
 
 	export let data;
-
 	const { form, errors, constraints } = superForm(data.form);
 </script>
 
@@ -11,6 +10,7 @@
 	<form method="POST">
 		<input
 			type="email"
+			name="email"
 			class="mb-4 w-full rounded border border-gray-300 px-4 py-3"
 			placeholder="Email"
 			bind:value={$form.email}
@@ -20,6 +20,7 @@
 
 		<input
 			type="password"
+			name="password"
 			class="mb-4 w-full rounded border border-gray-300 px-4 py-3"
 			placeholder="Password"
 			{...$constraints.password}

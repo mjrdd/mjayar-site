@@ -9,8 +9,11 @@ const loginSchema = z.object({
 });
 
 export async function load({ locals }) {
-	if (locals.pb.authStore.model) {
-		throw redirect(303, "/");
+	const userModel = locals.pb.authStore.model;
+
+	if (userModel) {
+		const redirectTo = userModel instanceof Admin ? "/admin" : "/";
+		throw redirect(303, redirectTo);
 	}
 
 	const form = await superValidate(loginSchema);
@@ -20,16 +23,14 @@ export async function load({ locals }) {
 export const actions = {
 	default: async function ({ locals, request }) {
 		const form = await superValidate(request, loginSchema);
+		console.log(form);
 
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
 		let record;
-
 		try {
-			// TODO: Add form validation
-
 			const res = await locals.pb.admins.authWithPassword(
 				form.data.email,
 				form.data.password
@@ -37,16 +38,15 @@ export const actions = {
 			record = res.admin;
 		} catch (err) {
 			if (err instanceof ClientResponseError) {
-				// TODO: Handle database error
+				return fail(400, { message: err.message });
 			}
 
 			throw error(500);
 		}
 
 		if (record && record instanceof Admin) {
-			throw redirect(308, "/admin");
+			throw redirect(303, "/admin");
 		}
-
 		return { form };
 	}
 };
