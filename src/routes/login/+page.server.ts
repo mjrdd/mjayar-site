@@ -1,4 +1,4 @@
-import { error, fail, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { Admin, ClientResponseError } from "pocketbase";
 import { superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
@@ -23,10 +23,8 @@ export async function load({ locals }) {
 export const actions = {
 	default: async function ({ locals, request }) {
 		const form = await superValidate(request, loginSchema);
-		console.log(form);
-
 		if (!form.valid) {
-			return fail(400, { form });
+			return fail(400, { form, message: null });
 		}
 
 		let record;
@@ -38,15 +36,21 @@ export const actions = {
 			record = res.admin;
 		} catch (err) {
 			if (err instanceof ClientResponseError) {
-				return fail(400, { message: err.message });
+				return fail(err.status === 0 ? 500 : err.status, {
+					form,
+					message: err.message
+				});
 			}
 
-			throw error(500);
+			return fail(500, {
+				form,
+				message: "An unexpected error has occurred. Please try again later."
+			});
 		}
 
 		if (record && record instanceof Admin) {
 			throw redirect(303, "/admin");
 		}
-		return { form };
+		return { form, message: null };
 	}
 };
