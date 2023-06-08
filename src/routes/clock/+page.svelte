@@ -2,11 +2,12 @@
 	import { onDestroy, onMount } from "svelte";
 	import { fade, fly } from "svelte/transition";
 	import { page } from "$app/stores";
-	import { objectToStyleString } from "$lib/utils";
+
 	import Icon from "@iconify/svelte/offline";
 	import GearFill from "@iconify-icons/bi/gear-fill";
-	import { modalStore } from "@skeletonlabs/skeleton";
+
 	import type { ModalComponent, ModalSettings } from "@skeletonlabs/skeleton";
+	import { modalStore } from "@skeletonlabs/skeleton";
 	import ModalConfig from "./ModalConfig.svelte";
 
 	$: params = Object.fromEntries($page.url.searchParams.entries());
@@ -81,26 +82,24 @@
 {/if}
 
 <div
-	class="flex h-full select-none flex-nowrap items-center justify-center"
-	style={objectToStyleString({
-		fontSize: Math.min(width / 4, height - 100) + "px",
-		fontFamily: params.font ? params.font : "inherit",
-		backgroundColor: params.bg ? "#" + params.bg : "inherit",
-		color: params.color ? "#" + params.color : "inherit"
-	})}
+	class="var-background var-color var-font-family var-font-size flex h-full select-none flex-nowrap items-center justify-center"
+	style:--var-background={params.bg ? "#" + params.bg : "transparent"}
+	style:--var-color={params.color ? "#" + params.color : "inherit"}
+	style:--var-font-family={params.font ? params.font : "inherit"}
+	style:--var-font-size={Math.min(width / 4, height - 100) + "px"}
 	on:mousemove={handleMouseMove}
 	bind:clientWidth={width}
 	bind:clientHeight={height}>
 	<div
-		class="grid grid-cols-2 place-items-center"
-		style={objectToStyleString({ width: width / 2.5 + "px" })}>
+		class="var-width grid grid-cols-2 place-items-center"
+		style:--var-width={width / 2.5 + "px"}>
 		<div>{Math.floor(hours / 10)}</div>
 		<div>{hours % 10}</div>
 	</div>
 	<span class="blink">:</span>
 	<div
-		class="grid grid-cols-2 place-items-center"
-		style={objectToStyleString({ width: width / 2.5 + "px" })}>
+		class="var-width grid grid-cols-2 place-items-center"
+		style:--var-width={width / 2.5 + "px"}>
 		<div>{Math.floor(minutes / 10)}</div>
 		<div>{minutes % 10}</div>
 	</div>
@@ -114,7 +113,27 @@
 	</div>
 {/if}
 
-<style>
+<style lang="postcss">
+	.var-background {
+		background: var(--var-background, transparent);
+	}
+
+	.var-color {
+		color: var(--var-color, inherit);
+	}
+
+	.var-font-family {
+		font-family: var(--var-font-family, inherit);
+	}
+
+	.var-font-size {
+		font-size: var(--var-font-size, 1em);
+	}
+
+	.var-width {
+		width: var(--var-width, auto);
+	}
+
 	.blink {
 		animation: kf-blink 1.5s step-end infinite;
 	}

@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
+import { round } from "mathjs";
 import { modalStore, type ModalComponent, type ModalSettings } from "@skeletonlabs/skeleton";
-import { round } from "$lib/utils";
 import { configStore, valueStore, type ConfigStore } from "./store";
 import SettingsModal from "./SettingsModal.svelte";
 

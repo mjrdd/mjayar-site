@@ -4,12 +4,17 @@
 	import "@skeletonlabs/skeleton/styles/all.css";
 	import "../app.css";
 
+	import { browser } from "$app/environment";
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
-	import { Modal, Toast, storePopup } from "@skeletonlabs/skeleton";
+	import { Modal, Toast, autoModeWatcher, storePopup } from "@skeletonlabs/skeleton";
 
-	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+	if (browser) {
+		storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+		autoModeWatcher();
+	}
 </script>
 
-<Modal />
-<Toast />
 <slot />
+
+<Toast />
+<Modal />

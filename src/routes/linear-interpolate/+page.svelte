@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Katex from "$lib/Katex.svelte";
+	import Katex from "$lib/components/Katex.svelte";
 
 	import Icon from "@iconify/svelte/offline";
 	import GearFill from "@iconify-icons/bi/gear-fill";

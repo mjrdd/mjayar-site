@@ -12,7 +12,7 @@
 	}
 </script>
 
-<div class="m-2 flex w-full max-w-xl flex-col rounded-lg p-6 bg-surface-50-900-token">
+<div class="m-2 flex w-full max-w-xl flex-col rounded-lg p-6 bg-surface-100-800-token">
 	<span class="my-4 text-3xl">Settings</span>
 	<ul class="list mb-4">
 		<li class="justify-between border-b">
