@@ -1,3 +1,5 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: [
@@ -25,7 +27,11 @@ export default {
 			lg: "1024px",
 			xl: "1280px"
 		},
-		extend: {}
+		extend: {
+			fontFamily: {
+				mono: ["JetBrains Mono", ...defaultTheme.fontFamily.mono]
+			}
+		}
 	},
 	plugins: [
 		require("@tailwindcss/forms"),
