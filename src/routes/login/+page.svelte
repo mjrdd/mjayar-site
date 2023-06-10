@@ -1,32 +1,51 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
-	import { toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
 	import { superForm } from "sveltekit-superforms/client";
+
+	import type { ToastSettings } from "@skeletonlabs/skeleton";
+	import { toastStore } from "@skeletonlabs/skeleton";
 
 	export let data;
 	export let form;
 
-	const { constraints, errors, form: sForm } = superForm(data.form);
-
-	if (browser && form?.message) {
+	function showErrorToast(message: string) {
 		const toastSetting: ToastSettings = {
-			message: form.message,
-			autohide: true
+			message,
+			timeout: 3000,
+			autohide: true,
+			background: "variant-filled-warning"
 		};
 
 		toastStore.trigger(toastSetting);
+	}
+
+	const {
+		constraints,
+		enhance,
+		errors,
+		form: formData
+	} = superForm(data.form, {
+		onResult({ result }) {
+			if (result.type === "failure" && result.status === 500 && result.data) {
+				showErrorToast(result.data.message);
+			}
+		}
+	});
+
+	if (browser && form?.message) {
+		showErrorToast(form.message);
 	}
 </script>
 
 <div class="mx-auto my-12 max-w-sm rounded bg-white p-8 shadow">
 	<div class="mb-8 text-center text-4xl">Login</div>
-	<form method="POST">
+	<form method="POST" use:enhance>
 		<input
 			type="email"
 			name="email"
 			class="mt-4 w-full rounded border border-gray-300 px-4 py-3"
 			placeholder="Email"
-			bind:value={$sForm.email}
+			bind:value={$formData.email}
 			{...$constraints.email}
 			required />
 		{#if $errors.email}<span class="text-sm text-red-600">{$errors.email}</span>{/if}
@@ -36,7 +55,7 @@
 			name="password"
 			class="mt-4 w-full rounded border border-gray-300 px-4 py-3"
 			placeholder="Password"
-			bind:value={$sForm.password}
+			bind:value={$formData.password}
 			{...$constraints.password}
 			required />
 		{#if $errors.password}<span class="text-sm text-red-600">{$errors.password}</span>{/if}

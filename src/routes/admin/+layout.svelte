@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { AppBar, AppShell } from "@skeletonlabs/skeleton";
+
 	import Icon from "@iconify/svelte/offline";
 	import biHeartFill from "@iconify-icons/bi/heart-fill";
-	import { AppBar, AppShell } from "@skeletonlabs/skeleton";
 
 	export let data;
 </script>

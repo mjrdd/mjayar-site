@@ -9,10 +9,10 @@ const loginSchema = z.object({
 });
 
 export async function load({ locals }) {
-	const userModel = locals.pb.authStore.model;
+	const model = locals.pb.authStore.model;
 
-	if (userModel) {
-		const redirectTo = userModel instanceof Admin ? "/admin" : "/";
+	if (model) {
+		const redirectTo = model instanceof Admin ? "/admin" : "/";
 		throw redirect(303, redirectTo);
 	}
 
