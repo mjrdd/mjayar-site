@@ -4,53 +4,67 @@ import { superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 
 const loginSchema = z.object({
-	email: z.string().email(),
+	emailOrUsername: z.string(),
 	password: z.string()
 });
 
 export async function load({ locals }) {
-	const model = locals.pb.authStore.model;
-
-	if (model) {
-		const redirectTo = model instanceof Admin ? "/admin" : "/";
+	const auth = locals.pb.authStore.model;
+	if (auth) {
+		const redirectTo = auth instanceof Admin ? "/admin" : "/my-account";
 		throw redirect(303, redirectTo);
 	}
-
-	const form = await superValidate(loginSchema);
-	return { form };
+	const loginForm = await superValidate(loginSchema);
+	return { loginForm };
 }
 
 export const actions = {
-	default: async function ({ locals, request }) {
-		const form = await superValidate(request, loginSchema);
-		if (!form.valid) {
-			return fail(400, { form, message: null });
+	default: async ({ locals, request, url }) => {
+		const loginForm = await superValidate(request, loginSchema);
+
+		if (!loginForm.valid) {
+			return fail(400, {
+				loginForm,
+				message: null
+			});
 		}
 
-		let record;
+		let auth;
 		try {
-			const res = await locals.pb.admins.authWithPassword(
-				form.data.email,
-				form.data.password
-			);
-			record = res.admin;
+			if (url.searchParams.has("admin")) {
+				const res = await locals.pb.admins.authWithPassword(
+					loginForm.data.emailOrUsername,
+					loginForm.data.password
+				);
+				auth = res.admin;
+			} else {
+				const res = await locals.pb
+					.collection("users")
+					.authWithPassword(loginForm.data.emailOrUsername, loginForm.data.password);
+				auth = res.record;
+			}
 		} catch (err) {
-			if (err instanceof ClientResponseError) {
-				return fail(err.status === 0 ? 500 : err.status, {
-					form,
+			if (err instanceof ClientResponseError && err.status !== 0) {
+				return fail(err.status, {
+					loginForm,
 					message: err.message
 				});
 			}
 
 			return fail(500, {
-				form,
+				loginForm,
 				message: "An unexpected error has occurred. Please try again later."
 			});
 		}
 
-		if (record && record instanceof Admin) {
-			throw redirect(303, "/admin");
+		if (auth) {
+			const redirectTo = auth instanceof Admin ? "/admin" : "/my-account";
+			throw redirect(303, redirectTo);
 		}
-		return { form, message: null };
+
+		return {
+			loginForm,
+			message: null
+		};
 	}
 };

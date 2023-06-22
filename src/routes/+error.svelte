@@ -58,12 +58,12 @@
 	<title>{name ?? $page.status + " Error"}</title>
 </svelte:head>
 
-<div class="w-full h-screen flex justify-center items-center">
+<div class="flex h-screen w-full items-center justify-center">
 	<div class="m-6 w-full max-w-md">
 		<h1 class="text-center">{name ?? $page.status}</h1>
 		<p class="mt-4 text-center">{message ?? $page.error?.message ?? ""}</p>
 
-		<div class="mt-8 flex flex-wrap gap-4 justify-center">
+		<div class="mt-8 flex flex-wrap justify-center gap-4">
 			<button type="button" on:click={goBack} class="btn variant-soft">
 				<span><Icon icon={biArrowLeft} /></span>
 				<span>Go Back</span>

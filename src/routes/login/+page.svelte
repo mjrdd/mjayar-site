@@ -2,20 +2,24 @@
 	import { browser } from "$app/environment";
 	import { superForm } from "sveltekit-superforms/client";
 
+	import { toastStore, ProgressRadial } from "@skeletonlabs/skeleton";
 	import type { ToastSettings } from "@skeletonlabs/skeleton";
-	import { toastStore } from "@skeletonlabs/skeleton";
+
+	import Icon from "@iconify/svelte/offline";
+	import biAsterisk from "@iconify-icons/bi/asterisk";
+	import biEnvelopeAt from "@iconify-icons/bi/envelope-at";
 
 	export let data;
 	export let form;
+	let loading = false;
 
 	function showErrorToast(message: string) {
 		const toastSetting: ToastSettings = {
 			message,
-			timeout: 3000,
+			timeout: 4000,
 			autohide: true,
-			background: "variant-filled-warning"
+			hideDismiss: true
 		};
-
 		toastStore.trigger(toastSetting);
 	}
 
@@ -24,11 +28,15 @@
 		enhance,
 		errors,
 		form: formData
-	} = superForm(data.form, {
+	} = superForm(data.loginForm, {
+		onSubmit() {
+			loading = true;
+		},
 		onResult({ result }) {
-			if (result.type === "failure" && result.status === 500 && result.data) {
+			if (result.type === "failure" && result.data) {
 				showErrorToast(result.data.message);
 			}
+			loading = false;
 		}
 	});
 
@@ -37,32 +45,43 @@
 	}
 </script>
 
-<div class="mx-auto my-12 max-w-sm rounded bg-white p-8 shadow">
-	<div class="mb-8 text-center text-4xl">Login</div>
-	<form method="POST" use:enhance>
-		<input
-			type="email"
-			name="email"
-			class="mt-4 w-full rounded border border-gray-300 px-4 py-3"
-			placeholder="Email"
-			bind:value={$formData.email}
-			{...$constraints.email}
-			required />
-		{#if $errors.email}<span class="text-sm text-red-600">{$errors.email}</span>{/if}
+<div class="flex h-screen items-center justify-center">
+	<form method="POST" use:enhance class="m-4 w-full max-w-lg p-8">
+		<h2>Account Login</h2>
 
-		<input
-			type="password"
-			name="password"
-			class="mt-4 w-full rounded border border-gray-300 px-4 py-3"
-			placeholder="Password"
-			bind:value={$formData.password}
-			{...$constraints.password}
-			required />
-		{#if $errors.password}<span class="text-sm text-red-600">{$errors.password}</span>{/if}
+		<div class="input-group input-group-divider mt-8 grid-cols-[auto_1fr_auto]">
+			<div class="input-group-shim">
+				<Icon icon={biEnvelopeAt} />
+			</div>
+			<input
+				type="text"
+				name="emailOrUsername"
+				placeholder="Email address or username"
+				bind:value={$formData.emailOrUsername}
+				{...$constraints.emailOrUsername} />
+		</div>
+		{#if $errors.emailOrUsername}
+			<span class="text-sm text-red-600">{$errors.emailOrUsername}</span>
+		{/if}
+
+		<div class="input-group input-group-divider mt-8 grid-cols-[auto_1fr_auto]">
+			<div class="input-group-shim">
+				<Icon icon={biAsterisk} />
+			</div>
+			<input
+				type="password"
+				name="password"
+				placeholder="Password"
+				{...$constraints.password} />
+		</div>
+		{#if $errors.password}
+			<span class="text-sm text-red-600">{$errors.password}</span>
+		{/if}
 
 		<button
 			type="submit"
-			class="my-4 w-full cursor-pointer rounded border-0 bg-gray-900 p-3 text-white hover:bg-gray-800">
+			disabled={loading}
+			class="btn variant-filled-primary mt-8 w-full uppercase">
 			Login
 		</button>
 	</form>

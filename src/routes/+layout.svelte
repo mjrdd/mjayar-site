@@ -5,13 +5,17 @@
 	import "../app.css";
 
 	import { browser } from "$app/environment";
-	import { Modal, Toast, storePopup } from "@skeletonlabs/skeleton";
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
+	import { Modal, Toast, setInitialClassState, storePopup } from "@skeletonlabs/skeleton";
 
 	if (browser) {
 		storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	}
 </script>
+
+<svelte:head>
+	{@html `<script nonce="%sveltekit.nonce%">(${setInitialClassState.toString()})();</script>`}
+</svelte:head>
 
 <slot />
 <Toast position="br" max={4} />
