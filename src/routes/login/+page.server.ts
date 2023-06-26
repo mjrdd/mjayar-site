@@ -4,7 +4,10 @@ import { superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 
 const schema = z.object({
-	email_or_username: z.string(),
+	email_or_username: z
+		.string()
+		.email()
+		.or(z.string().regex(/^[a-zA-Z0-9]*$/)),
 	password: z.string()
 });
 
@@ -23,22 +26,19 @@ export const actions = {
 	default: async ({ locals, request, url }) => {
 		const form = await superValidate(request, schema);
 		if (!form.valid) {
-			return fail(400, { login_form: form, message: null });
+			return fail(400, { login_form: form, message: undefined });
 		}
 
-		let auth;
 		try {
 			if (url.searchParams.has("admin")) {
-				const res = await locals.pb.admins.authWithPassword(
+				await locals.pb.admins.authWithPassword(
 					form.data.email_or_username,
 					form.data.password
 				);
-				auth = res.admin;
 			} else {
-				const res = await locals.pb
+				await locals.pb
 					.collection("users")
 					.authWithPassword(form.data.email_or_username, form.data.password);
-				auth = res.record;
 			}
 		} catch (err) {
 			if (err instanceof ClientResponseError && err.status !== 0) {
@@ -50,14 +50,9 @@ export const actions = {
 			});
 		}
 
-		if (auth) {
-			const redirectTo =
-				url.searchParams.get("redirectTo") ||
-				(locals.pb.authStore.model instanceof Admin
-					? "/admin/dashboard"
-					: "/account/profile");
-			throw redirect(303, redirectTo);
-		}
-		return { login_form: form, message: null };
+		const redirectTo =
+			url.searchParams.get("redirectTo") ||
+			(locals.pb.authStore.model instanceof Admin ? "/admin/dashboard" : "/account/profile");
+		throw redirect(303, redirectTo);
 	}
 };

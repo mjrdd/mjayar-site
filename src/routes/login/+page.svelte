@@ -2,8 +2,7 @@
 	import { browser } from "$app/environment";
 	import { superForm } from "sveltekit-superforms/client";
 
-	import { toastStore } from "@skeletonlabs/skeleton";
-	import type { ToastSettings } from "@skeletonlabs/skeleton";
+	import { ProgressRadial, toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
 
 	import Icon from "@iconify/svelte/offline";
 	import biAsterisk from "@iconify-icons/bi/asterisk";
@@ -26,11 +25,12 @@
 		constraints,
 		enhance,
 		errors,
-		form: formData
+		form: login_form,
+		submitting
 	} = superForm(data.login_form, {
 		onResult({ result, formEl }) {
 			if (result.type === "failure" && result.data) {
-				showErrorToast(result.data.message);
+				if (result.data.message) showErrorToast(result.data.message);
 				formEl.reset();
 			}
 		}
@@ -42,9 +42,8 @@
 </script>
 
 <div class="flex h-screen items-center justify-center">
-	<form method="POST" use:enhance class="m-4 w-full max-w-lg p-8">
+	<form method="POST" use:enhance class="m-2 w-full max-w-lg p-2">
 		<div class="h2">Account Login</div>
-
 		<div class="input-group input-group-divider mt-8 grid-cols-[auto_1fr_auto] !bg-transparent">
 			<div class="input-group-shim">
 				<Icon icon={biEnvelopeAt} />
@@ -53,7 +52,7 @@
 				type="text"
 				name="email_or_username"
 				placeholder="Email address or username"
-				bind:value={$formData.email_or_username}
+				bind:value={$login_form.email_or_username}
 				{...$constraints.email_or_username} />
 		</div>
 		{#if $errors.email_or_username}
@@ -75,7 +74,14 @@
 		{/if}
 
 		<button type="submit" class="btn variant-filled-primary mt-6 w-full">
-			<span class="uppercase font-extrabold">Login</span>
+			<span class="font-extrabold uppercase">Login</span>
 		</button>
 	</form>
 </div>
+
+{#if $submitting}
+	<div
+		class="fixed top-0 flex h-screen w-screen items-center justify-center bg-white !bg-opacity-80 dark:bg-black">
+		<div><ProgressRadial value={undefined} /></div>
+	</div>
+{/if}
