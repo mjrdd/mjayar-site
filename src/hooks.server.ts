@@ -6,9 +6,10 @@ export async function handle({ event, resolve }) {
 	event.locals.pb.authStore.loadFromCookie(event.request.headers.get("cookie") || "");
 
 	try {
-		event.locals.pb.authStore.isValid && event.locals.pb.authStore.model instanceof Admin
-			? await event.locals.pb.admins.authRefresh()
-			: await event.locals.pb.collection("users").authRefresh();
+		event.locals.pb.authStore.isValid &&
+			(event.locals.pb.authStore.model instanceof Admin
+				? await event.locals.pb.admins.authRefresh()
+				: await event.locals.pb.collection("users").authRefresh());
 	} catch (err) {
 		if (err instanceof ClientResponseError && err.status !== 0) {
 			event.locals.pb.authStore.clear();
