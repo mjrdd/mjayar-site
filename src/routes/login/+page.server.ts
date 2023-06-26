@@ -58,7 +58,10 @@ export const actions = {
 		}
 
 		if (auth) {
-			const redirectTo = auth instanceof Admin ? "/admin" : "/my-account";
+			const redirectTo =
+				url.searchParams.get("redirectTo") || auth instanceof Admin
+					? "/admin/dashboard"
+					: "/account/profile";
 			throw redirect(303, redirectTo);
 		}
 
