@@ -2,7 +2,7 @@
 	import { browser } from "$app/environment";
 	import { superForm } from "sveltekit-superforms/client";
 
-	import { toastStore, ProgressRadial } from "@skeletonlabs/skeleton";
+	import { toastStore } from "@skeletonlabs/skeleton";
 	import type { ToastSettings } from "@skeletonlabs/skeleton";
 
 	import Icon from "@iconify/svelte/offline";
@@ -11,7 +11,6 @@
 
 	export let data;
 	export let form;
-	let loading = false;
 
 	function showErrorToast(message: string) {
 		const toastSetting: ToastSettings = {
@@ -28,15 +27,12 @@
 		enhance,
 		errors,
 		form: formData
-	} = superForm(data.loginForm, {
-		onSubmit() {
-			loading = true;
-		},
-		onResult({ result }) {
+	} = superForm(data.login_form, {
+		onResult({ result, formEl }) {
 			if (result.type === "failure" && result.data) {
 				showErrorToast(result.data.message);
+				formEl.reset();
 			}
-			loading = false;
 		}
 	});
 
@@ -47,24 +43,24 @@
 
 <div class="flex h-screen items-center justify-center">
 	<form method="POST" use:enhance class="m-4 w-full max-w-lg p-8">
-		<h2>Account Login</h2>
+		<div class="h2">Account Login</div>
 
-		<div class="input-group input-group-divider mt-8 grid-cols-[auto_1fr_auto]">
+		<div class="input-group input-group-divider mt-8 grid-cols-[auto_1fr_auto] !bg-transparent">
 			<div class="input-group-shim">
 				<Icon icon={biEnvelopeAt} />
 			</div>
 			<input
 				type="text"
-				name="emailOrUsername"
+				name="email_or_username"
 				placeholder="Email address or username"
-				bind:value={$formData.emailOrUsername}
-				{...$constraints.emailOrUsername} />
+				bind:value={$formData.email_or_username}
+				{...$constraints.email_or_username} />
 		</div>
-		{#if $errors.emailOrUsername}
-			<span class="text-sm text-red-600">{$errors.emailOrUsername}</span>
+		{#if $errors.email_or_username}
+			<span class="text-sm text-red-600">{$errors.email_or_username}</span>
 		{/if}
 
-		<div class="input-group input-group-divider mt-8 grid-cols-[auto_1fr_auto]">
+		<div class="input-group input-group-divider mt-6 grid-cols-[auto_1fr_auto] !bg-transparent">
 			<div class="input-group-shim">
 				<Icon icon={biAsterisk} />
 			</div>
@@ -78,11 +74,8 @@
 			<span class="text-sm text-red-600">{$errors.password}</span>
 		{/if}
 
-		<button
-			type="submit"
-			disabled={loading}
-			class="btn variant-filled-primary mt-8 w-full uppercase">
-			Login
+		<button type="submit" class="btn variant-filled-primary mt-6 w-full">
+			<span class="uppercase font-extrabold">Login</span>
 		</button>
 	</form>
 </div>
