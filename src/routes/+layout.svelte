@@ -5,12 +5,10 @@
 	import "../app.css";
 
 	import { browser } from "$app/environment";
-	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
+	import { arrow, autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
 	import { Modal, Toast, setInitialClassState, storePopup } from "@skeletonlabs/skeleton";
 
-	if (browser) {
-		storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
-	}
+	if (browser) storePopup.set({ arrow, autoUpdate, computePosition, flip, offset, shift });
 </script>
 
 <svelte:head>
