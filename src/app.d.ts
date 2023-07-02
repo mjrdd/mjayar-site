@@ -1,5 +1,9 @@
-declare global {
-	namespace App {}
-}
+import PocketBase from "pocketbase";
 
-export {};
+declare global {
+	namespace App {
+		interface Locals {
+			pb: PocketBase;
+		}
+	}
+}
