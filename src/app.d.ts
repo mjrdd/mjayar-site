@@ -6,4 +6,6 @@ declare global {
 			pb: PocketBase;
 		}
 	}
+
+	declare module "*.md";
 }

@@ -1,3 +1,5 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: [
@@ -12,7 +14,11 @@ export default {
 		container: {
 			center: true
 		},
-		extend: {}
+		extend: {
+			fontFamily: {
+				mono: ["JetBrains Mono", ...defaultTheme.fontFamily.mono]
+			}
+		}
 	},
 	plugins: [
 		require("@tailwindcss/forms"),
