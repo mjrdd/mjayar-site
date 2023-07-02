@@ -28,32 +28,36 @@
 		};
 	});
 
-	const modalComponent: ModalComponent = {
-		ref: ModalConfig
-	};
-
-	const modalSetting: ModalSettings = {
-		type: "component",
-		component: modalComponent
-	};
-
 	function showModal() {
+		const modalComponent: ModalComponent = {
+			ref: ModalConfig
+		};
+
+		const modalSetting: ModalSettings = {
+			type: "component",
+			component: modalComponent
+		};
+
 		modalStore.trigger(modalSetting);
 	}
 
 	let showButton = false;
-	let timeoutId: number;
+	let timeoutId: number | undefined;
 
 	function handleMouseMove() {
 		showButton = true;
-		clearTimeout(timeoutId);
+		if (timeoutId) clearTimeout(timeoutId);
+
 		timeoutId = setTimeout(() => {
 			showButton = false;
 		}, 1000);
 	}
 
 	onDestroy(() => {
-		clearTimeout(timeoutId);
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+			timeoutId = undefined;
+		}
 	});
 
 	$: minutes = now.getMinutes();
@@ -107,7 +111,7 @@
 
 {#if showButton}
 	<div class="fixed bottom-0 right-0 p-6" transition:fly={{ y: 50 }}>
-		<button type="button" class="btn variant-filled-surface" on:click={showModal}>
+		<button type="button" class="btn-icon variant-filled-surface" on:click={showModal}>
 			<Icon icon={GearFill} />
 		</button>
 	</div>
