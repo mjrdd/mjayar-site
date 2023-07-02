@@ -18,8 +18,8 @@ dependencies:
     specifier: ^0.16.8
     version: 0.16.8
   lucide-svelte:
-    specifier: ^0.241.0
-    version: 0.241.0(svelte@4.0.1)
+    specifier: ^0.257.0
+    version: 0.257.0(svelte@4.0.1)
   mathjs:
     specifier: ^11.8.2
     version: 11.8.2
@@ -39,7 +39,7 @@ dependencies:
     specifier: ^3.0.1
     version: 3.0.1
   shiki:
-    specifier: ^0.14.2
+    specifier: ^0.14.3
     version: 0.14.3
   tailwind-merge:
     specifier: ^1.13.2
@@ -95,8 +95,8 @@ devDependencies:
     specifier: ^2.32.2
     version: 2.32.2(eslint@8.44.0)(svelte@4.0.1)
   mdsvex:
-    specifier: ^0.10.6
-    version: 0.10.6(svelte@4.0.1)
+    specifier: ^0.11.0
+    version: 0.11.0(svelte@4.0.1)
   postcss:
     specifier: ^8.4.24
     version: 8.4.24
@@ -2207,10 +2207,10 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /lucide-svelte@0.241.0(svelte@4.0.1):
-    resolution: {integrity: sha512-y6wDjiTaWF9dIFGVCJpELAuhsKN7CiU21vhOnW9Adhi2YbYMOVhNUxceIf6JDuJOg6ZiV1r5cffi92fyvkLd3Q==}
+  /lucide-svelte@0.257.0(svelte@4.0.1):
+    resolution: {integrity: sha512-URC6Yg0VTLlRWc0QU2JDK9Aiyup9BCd3D1ybmVd6kIOJR0JDEsIdZsHIk2uN4doom1gNsNWkr/m07B+klN/NEA==}
     peerDependencies:
-      svelte: ^3.49.0
+      svelte: '>=3 <5'
     dependencies:
       svelte: 4.0.1
     dev: false
@@ -2272,10 +2272,10 @@ packages:
   /mdn-data@2.0.30:
     resolution: {integrity: sha512-GaqWWShW4kv/G9IEucWScBx9G1/vsFZZJUO+tD26M8J8z3Kw5RDQjaoZe03YAClgeS/SWPOcb4nkFBTEi5DUEA==}
 
-  /mdsvex@0.10.6(svelte@4.0.1):
-    resolution: {integrity: sha512-aGRDY0r5jx9+OOgFdyB9Xm3EBr9OUmcrTDPWLB7a7g8VPRxzPy4MOBmcVYgz7ErhAJ7bZ/coUoj6aHio3x/2mA==}
+  /mdsvex@0.11.0(svelte@4.0.1):
+    resolution: {integrity: sha512-gJF1s0N2nCmdxcKn8HDn0LKrN8poStqAicp6bBcsKFd/zkUBGLP5e7vnxu+g0pjBbDFOscUyI1mtHz+YK2TCDw==}
     peerDependencies:
-      svelte: 3.x
+      svelte: '>=3 <5'
     dependencies:
       '@types/unist': 2.0.6
       prism-svelte: 0.4.7
