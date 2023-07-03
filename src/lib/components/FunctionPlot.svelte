@@ -1,22 +1,27 @@
 <script lang="ts">
-	import type { FunctionPlotOptions } from "function-plot/dist/types";
 	import { onMount } from "svelte";
 	import { twClass } from "../utils";
+	import type { FunctionPlotOptions } from "function-plot";
 
+	export let className = "";
+
+	export let element = "div";
 	export let options: Omit<FunctionPlotOptions, "target"> = {};
-	export let customClass = "";
+	export { className as class };
 
-	let container: HTMLElement;
+	let target: HTMLElement;
 
 	onMount(async () => {
 		const functionPlot = (await import("function-plot")).default;
-		functionPlot({ target: container, ...options });
+		functionPlot({ target, ...options });
 	});
 </script>
 
-<div
-	bind:this={container}
+<svelte:element
+	this={element}
+	bind:this={target}
 	class={twClass(
-		"dark:[&_.x.axis_.tick_line]:stroke-white dark:[&_.y.axis_.tick_line]:stroke-white",
-		customClass
-	)} />
+		"dark:[&_.x.axis_.tick_line]:stroke-white dark:[&_.x.origin]:stroke-white dark:[&_.y.axis_.tick_line]:stroke-white dark:[&_.y.origin]:stroke-white",
+		className
+	)}
+	{...$$restProps} />

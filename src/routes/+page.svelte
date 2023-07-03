@@ -1,4 +1,5 @@
 <script lang="ts">
+	import FunctionPlot from "$lib/components/FunctionPlot.svelte";
 	import { LightSwitch } from "@skeletonlabs/skeleton";
 </script>
 
@@ -14,10 +15,12 @@
 	</header>
 	<div
 		class="container grid h-[640px] w-full grid-cols-none grid-rows-2 md:grid-cols-2 md:grid-rows-none md:items-center">
-		<div />
+		<div class="m-2 overflow-hidden">
+			<FunctionPlot options={{ data: [{ fn: "x^2" }], disableZoom: true, grid: true }} />
+		</div>
 		<div class="mx-8 flex flex-col justify-center gap-8 md:mx-16">
-			<h1 class="font-semibold">Welcome to mjayar!</h1>
-			<p class="font-light">
+			<h1 class="font-extrabold">Welcome to mjayar!</h1>
+			<p class="font-extralight leading-loose">
 				Discover a captivating world of creativity and innovation on my personal website,
 				where I showcase a carefully curated collection of my extraordinary projects.
 			</p>

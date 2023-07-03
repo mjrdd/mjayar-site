@@ -5,8 +5,6 @@ import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfil
 export default defineConfig({
 	plugins: [sveltekit()],
 	optimizeDeps: {
-		esbuildOptions: {
-			plugins: [NodeModulesPolyfillPlugin()]
-		}
+		esbuildOptions: { plugins: [NodeModulesPolyfillPlugin()] }
 	}
 });
