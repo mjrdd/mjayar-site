@@ -1,5 +1,6 @@
 <script lang="ts">
 	import FunctionPlot from "$lib/components/FunctionPlot.svelte";
+	import Katex from "$lib/components/Katex.svelte";
 	import { LightSwitch } from "@skeletonlabs/skeleton";
 </script>
 
@@ -16,6 +17,7 @@
 	<div
 		class="container grid h-[640px] w-full grid-cols-none grid-rows-2 md:grid-cols-2 md:grid-rows-none md:items-center">
 		<div class="m-2 overflow-hidden">
+			<Katex class="flex justify-center">f(x) = x^2</Katex>
 			<FunctionPlot options={{ data: [{ fn: "x^2" }], disableZoom: true, grid: true }} />
 		</div>
 		<div class="mx-8 flex flex-col justify-center gap-8 md:mx-16">
