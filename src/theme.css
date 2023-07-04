@@ -7,19 +7,19 @@
 		--theme-font-family-heading: "Inter var", system-ui;
 	}
 
-	--theme-font-color-base: 0 0 0;
-	--theme-font-color-dark: 255 255 255;
+	--theme-font-color-base: 06 07 09;
+	--theme-font-color-dark: 254 253 251;
 	--theme-rounded-base: 4px;
 	--theme-rounded-container: 4px;
 	--theme-border-base: 1px;
 
-	--on-primary: 255 255 255;
-	--on-secondary: 255 255 255;
-	--on-tertiary: 255 255 255;
-	--on-success: 255 255 255;
-	--on-warning: 255 255 255;
-	--on-error: 255 255 255;
-	--on-surface: 255 255 255;
+	--on-primary: 254 253 251;
+	--on-secondary: 254 253 251;
+	--on-tertiary: 254 253 251;
+	--on-success: 254 253 251;
+	--on-warning: 254 253 251;
+	--on-error: 254 253 251;
+	--on-surface: 254 253 251;
 
 	--color-primary-50: 239 246 255;
 	--color-primary-100: 219 234 254;
