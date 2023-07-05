@@ -52,13 +52,12 @@
 	<title>Login to mjayar</title>
 </svelte:head>
 
-<AppShell
-	class="bg-gradient-to-br from-surface-200 from-10% to-surface-50 to-45% dark:from-surface-800 dark:to-surface-900">
+<AppShell>
 	<svelte:fragment slot="header">
 		<AppBar background="bg-transparent">
 			<svelte:fragment slot="lead">
 				<div>
-					<a href="/" class="uppercase font-extrabold">mjayar</a>
+					<a href="/" class="font-extrabold uppercase">mjayar</a>
 				</div>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
@@ -69,8 +68,8 @@
 		</AppBar>
 	</svelte:fragment>
 
-	<div class="relative flex h-full items-center justify-center">
-		<form method="POST" use:enhance class="m-2 w-full max-w-md p-2">
+	<div class="relative flex h-full justify-center sm:items-center">
+		<form method="POST" use:enhance class="mt-6 w-full max-w-md p-4 sm:m-0">
 			<div class="h2">Account Login</div>
 			<div
 				class="input-group input-group-divider mt-8 grid-cols-[auto_1fr_auto] !bg-transparent">
