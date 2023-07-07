@@ -1,22 +1,22 @@
 <script lang="ts">
 	import { afterUpdate } from "svelte";
-	import katex from "katex";
+	import katex, { type KatexOptions } from "katex";
 	import "katex/dist/katex.css";
 
-	let renderElement: HTMLElement;
-	let texElement: HTMLElement;
+	let output: HTMLElement;
+	let texInput: HTMLElement;
 
 	export let element = "div";
 	export let tex = "";
-	export let displayMode = false;
+	export let options: KatexOptions = {};
 
 	afterUpdate(() => {
-		katex.render(tex || texElement.textContent || "", renderElement, {
-			displayMode,
-			throwOnError: false
+		katex.render(texInput.textContent || tex, output, {
+			throwOnError: false,
+			...options
 		});
 	});
 </script>
 
-<span class="hidden" bind:this={texElement}><slot /></span>
-<svelte:element this={element} bind:this={renderElement} {...$$restProps} />
+<span class="hidden" bind:this={texInput}><slot /></span>
+<svelte:element this={element} bind:this={output} {...$$restProps} />
