@@ -3,8 +3,8 @@ import { redirect } from "@sveltejs/kit";
 export async function POST({ locals, url }) {
 	locals.pb.authStore.clear();
 
-	if (url.searchParams.has("redirectTo")) {
-		throw redirect(303, url.searchParams.get("redirectTo") || "/");
-	}
+	const redirectURL = url.searchParams.get("redirect_to");
+	if (redirectURL) throw redirect(302, redirectURL);
+
 	return new Response(undefined, { status: 200 });
 }

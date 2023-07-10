@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { afterUpdate } from "svelte";
-	import { twClass } from "../utils";
+	import { cn } from "../utils";
 	import type { FunctionPlotOptions } from "function-plot";
 
 	export let element = "div";
@@ -20,7 +20,7 @@
 <svelte:element
 	this={element}
 	bind:this={plotContainer}
-	class={twClass(
+	class={cn(
 		"dark:[&_.x.axis_.tick_line]:stroke-white dark:[&_.x.origin]:stroke-white dark:[&_.y.axis_.tick_line]:stroke-white dark:[&_.y.origin]:stroke-white",
 		className
 	)}

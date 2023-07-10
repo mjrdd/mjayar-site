@@ -51,7 +51,7 @@
 							<li>
 								<form
 									method="POST"
-									action="/logout?redirectTo=/login"
+									action="/logout?redirect_to=/login"
 									class="contents">
 									<button type="submit" class="w-full">
 										<span><Icon icon={biBoxArrowLeft} /></span>

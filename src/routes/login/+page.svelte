@@ -14,6 +14,7 @@
 	import Icon from "@iconify/svelte/offline";
 	import biAsterisk from "@iconify-icons/bi/asterisk";
 	import biEnvelopeAt from "@iconify-icons/bi/envelope-at";
+	import OAuth from "./OAuth.svelte";
 
 	export let data;
 	export let form;
@@ -68,8 +69,12 @@
 		</AppBar>
 	</svelte:fragment>
 
-	<div class="relative flex h-full justify-center sm:items-center">
-		<form method="POST" use:enhance class="mt-6 w-full max-w-md p-4 sm:m-0">
+	<div class="relative flex h-full flex-col items-center">
+		<form
+			action="?/authWithPassword"
+			method="post"
+			use:enhance
+			class="mt-6 w-full max-w-md p-4 sm:m-0">
 			<div class="h2">Account Login</div>
 			<div
 				class="input-group input-group-divider mt-8 grid-cols-[auto_1fr_auto] !bg-transparent">
@@ -80,11 +85,11 @@
 					type="text"
 					name="email_or_username"
 					placeholder="Email address or username"
-					bind:value={$login_form.email_or_username}
-					{...$constraints.email_or_username} />
+					bind:value={$login_form.emailOrUsername}
+					{...$constraints.emailOrUsername} />
 			</div>
-			{#if $errors.email_or_username}
-				<span class="text-sm text-red-600">{$errors.email_or_username}</span>
+			{#if $errors.emailOrUsername}
+				<span class="text-sm text-red-600">{$errors.emailOrUsername}</span>
 			{/if}
 
 			<div
@@ -106,6 +111,14 @@
 				<span class="font-extrabold uppercase">Login</span>
 			</button>
 		</form>
+
+		<div class="inline-flex w-full items-center justify-center">
+			<hr class="mx-6 my-8 h-px w-32 border-0 bg-gray-200 dark:bg-gray-700" />
+			<span class="absolute left-1/2 -translate-x-1/2 bg-inherit px-3">or</span>
+			<hr class="mx-6 my-8 h-px w-32 border-0 bg-gray-200 dark:bg-gray-700" />
+		</div>
+
+		<OAuth />
 
 		{#if $submitting}
 			<div
