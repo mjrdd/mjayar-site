@@ -32,10 +32,10 @@
 
 	const {
 		allErrors,
+		delayed,
 		enhance,
 		errors,
-		form: formStore,
-		submitting
+		form: formStore
 	} = superForm(data.loginWithPasswordForm);
 
 	$: {
@@ -99,7 +99,7 @@
 				<span class="text-sm text-red-600">{$errors.password}</span>
 			{/if}
 
-			<button type="submit" class="btn shadow variant-filled-primary mt-6 w-full">
+			<button type="submit" class="btn variant-filled-primary mt-6 w-full shadow">
 				<span class="uppercase">Login</span>
 			</button>
 		</form>
@@ -110,24 +110,24 @@
 			<hr class="mx-6 my-8 h-px w-32 border-0 bg-gray-200 dark:bg-gray-700" />
 		</div>
 
-		<form method="post" use:enhance class="flex w-full max-w-[18rem] p-2 flex-col gap-4">
+		<form method="post" use:enhance class="flex w-full max-w-[18rem] flex-col gap-4 p-2">
 			<button
 				type="submit"
 				formaction="?/loginWithOAuth&provider=google"
-				class="btn grid w-full grid-cols-[2rem_1fr] bg-white text-gray-950 border border-gray-100 shadow">
+				class="btn grid w-full grid-cols-[2rem_1fr] border border-gray-100 bg-white text-gray-950 shadow">
 				<span><img src={GoogleSVG} alt="google" class="w-6" /></span>
 				<span class="text-left">Continue with Google</span>
 			</button>
 			<button
 				type="submit"
 				formaction="?/loginWithOAuth&provider=github"
-				class="btn grid w-full grid-cols-[2rem_1fr] bg-white text-gray-950 border border-gray-100 shadow">
+				class="btn grid w-full grid-cols-[2rem_1fr] border border-gray-100 bg-white text-gray-950 shadow">
 				<span><img src={GithubSVG} alt="github" class="w-6" /></span>
 				<span class="text-left">Continue with Github</span>
 			</button>
 		</form>
 
-		{#if $submitting}
+		{#if $delayed}
 			<div
 				class="fixed top-0 flex h-full w-full items-center justify-center bg-white !bg-opacity-80 dark:bg-black">
 				<div><ProgressRadial value={undefined} /></div>
