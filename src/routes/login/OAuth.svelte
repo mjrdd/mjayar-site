@@ -11,13 +11,13 @@
 		formaction="?/authWithOAuth&provider=google"
 		class="btn mx-2 grid w-full grid-cols-[2rem_1fr] bg-white text-gray-950">
 		<span><img src={GoogleSVG} alt="google" class="w-6" /></span>
-		<span>Continue with Google</span>
+		<span>Sign in with Google</span>
 	</button>
 	<button
 		type="submit"
 		formaction="?/authWithOAuth&provider=github"
 		class="btn mx-2 grid w-full grid-cols-[2rem_1fr] bg-white text-gray-950">
 		<span><img src={GithubSVG} alt="github" class="w-6" /></span>
-		<span>Continue with Github</span>
+		<span>Sign in with Github</span>
 	</button>
 </form>

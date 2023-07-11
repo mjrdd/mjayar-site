@@ -1,10 +1,10 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { Admin, ClientResponseError } from "pocketbase";
-import { superValidate } from "sveltekit-superforms/server";
+import { setError, superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 import { assert } from "$lib/utils";
 
-const schemaAuth = z.object({
+const loginWithPasswordSchema = z.object({
 	emailOrUsername: z
 		.string()
 		.email()
@@ -12,25 +12,25 @@ const schemaAuth = z.object({
 	password: z.string()
 });
 
-const schemaOAuth = z.object({});
+const loginWithOAuthSchema = z.object({});
 
 export async function load({ locals, url }) {
-	if (locals.pb.authStore.model && locals.pb.authStore.isValid) {
+	if (locals.pb.authStore.model) {
 		const redirectTo =
 			url.searchParams.get("redirectTo") ||
 			(locals.pb.authStore.model instanceof Admin ? "/admin/dashboard" : "/account/profile");
 		throw redirect(303, redirectTo);
 	}
-	const formAuth = await superValidate(schemaAuth);
-	const formOAuth = await superValidate(schemaOAuth);
-	return { login_form: formAuth, formOAuth: formOAuth };
+	const loginWithPasswordForm = await superValidate(loginWithPasswordSchema);
+	const loginWithOAuthForm = await superValidate(loginWithOAuthSchema);
+	return { loginWithPasswordForm, loginWithOAuthForm };
 }
 
 export const actions = {
-	authWithPassword: async ({ locals, request, url }) => {
-		const form = await superValidate(request, schemaAuth);
+	loginWithPassword: async ({ locals, request, url }) => {
+		const form = await superValidate(request, loginWithPasswordSchema);
 		if (!form.valid) {
-			return fail(400, { login_form: form, message: undefined });
+			return fail(400, { loginWithPasswordForm: form });
 		}
 
 		try {
@@ -46,11 +46,11 @@ export const actions = {
 			}
 		} catch (err) {
 			if (err instanceof ClientResponseError && err.status !== 0) {
-				return fail(err.status, { login_form: form, message: err.message });
+				return setError(form, err.message, { status: 400 });
 			}
-			return fail(500, {
-				login_form: form,
-				message: "An unexpected error has occurred. Please try again later."
+
+			return setError(form, "An unexpected error has occurred. Please try again later.", {
+				status: 500
 			});
 		}
 
@@ -60,7 +60,7 @@ export const actions = {
 		throw redirect(303, redirectTo);
 	},
 
-	authWithOAuth: async ({ cookies, locals, url }) => {
+	loginWithOAuth: async ({ cookies, locals, url }) => {
 		let authProviderRedirectURL;
 
 		try {
@@ -70,7 +70,7 @@ export const actions = {
 				authMethods.authProviders.find((provider) => provider.name == providerName)
 			);
 
-			const redirectURL = `${url.origin}/api/oauth/${providerName}`;
+			const redirectURL = `${url.origin}/login/oauth/${providerName}`;
 			authProviderRedirectURL = `${authProvider.authUrl}${redirectURL}`;
 
 			const state = authProvider.state;

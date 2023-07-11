@@ -16,7 +16,7 @@ export const GET = async ({ cookies, locals, params, url }) => {
 
 		if (expectedState != state) throw new Error("State is invalid");
 
-		const redirectURL = `${url.origin}/api/oauth/${params.provider}`;
+		const redirectURL = `${url.origin}/login/oauth/${params.provider}`;
 
 		await locals.pb
 			.collection("users")

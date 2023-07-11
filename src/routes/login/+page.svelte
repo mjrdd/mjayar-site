@@ -17,7 +17,6 @@
 	import OAuth from "./OAuth.svelte";
 
 	export let data;
-	export let form;
 
 	function showErrorToast(message: string) {
 		const toastSetting: ToastSettings = {
@@ -30,22 +29,18 @@
 	}
 
 	const {
-		constraints,
+		allErrors,
 		enhance,
 		errors,
-		form: login_form,
+		form: formStore,
 		submitting
-	} = superForm(data.login_form, {
-		onResult({ result, formEl }) {
-			if (result.type === "failure" && result.data) {
-				if (result.data.message) showErrorToast(result.data.message);
-				formEl.reset();
-			}
-		}
-	});
+	} = superForm(data.loginWithPasswordForm);
 
-	if (browser && form?.message) {
-		showErrorToast(form.message);
+	$: {
+		if (browser) {
+			const authErrors = $allErrors.find((err) => err.path == "_errors");
+			if (authErrors) authErrors.messages.forEach(showErrorToast);
+		}
 	}
 </script>
 
@@ -71,7 +66,7 @@
 
 	<div class="relative flex h-full flex-col items-center">
 		<form
-			action="?/authWithPassword"
+			action="?/loginWithPassword"
 			method="post"
 			use:enhance
 			class="mt-6 w-full max-w-md p-4 sm:m-0">
@@ -83,13 +78,14 @@
 				</div>
 				<input
 					type="text"
-					name="email_or_username"
+					name="emailOrUsername"
 					placeholder="Email address or username"
-					bind:value={$login_form.emailOrUsername}
-					{...$constraints.emailOrUsername} />
+					required
+					aria-required="true"
+					bind:value={$formStore.emailOrUsername} />
 			</div>
 			{#if $errors.emailOrUsername}
-				<span class="text-sm text-red-600">{$errors.emailOrUsername}</span>
+				<span class="text-sm text-red-600">{$errors.emailOrUsername[0]}</span>
 			{/if}
 
 			<div
@@ -101,7 +97,8 @@
 					type="password"
 					name="password"
 					placeholder="Password"
-					{...$constraints.password} />
+					required
+					aria-required="true" />
 			</div>
 			{#if $errors.password}
 				<span class="text-sm text-red-600">{$errors.password}</span>
